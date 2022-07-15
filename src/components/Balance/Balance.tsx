@@ -3,7 +3,7 @@ import { useAppSelector } from '../../app/hooks';
 import { getProperTransactionAmountDisplay } from '../../lib/utils';
 
 export const Balance = () => {
-  const transactions = useAppSelector((state) => state.transactions);
+  const transactions = useAppSelector((state) => state.transactions.items);
 
   const balance = transactions.reduce((prev, cur) => prev + cur.amount, 0);
 

@@ -1,30 +1,72 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { addDoc, deleteDoc, doc, getDocs } from 'firebase/firestore';
+import { transactionsRef } from '../app/firebase';
 
-export interface TransactionState {
+export interface TransactionModel {
   id: string;
   text: string;
   amount: number;
 }
 
-export const initialState: TransactionState[] = [
-  { id: '1', text: 'Flower', amount: -20 },
-  { id: '2', text: 'Salary', amount: 300 },
-  { id: '3', text: 'Book', amount: -10 },
-  { id: '4', text: 'Camera', amount: 150 },
-];
+interface TransactionState {
+  items: TransactionModel[];
+  status: 'idle' | 'loading' | 'failed' | 'succeeded';
+}
+
+export const initialState: TransactionState = {
+  items: [],
+  status: 'idle',
+};
 
 export const transactionsSlice = createSlice({
   initialState,
-  name: 'transactions',
+  name: 'transactionsSlice',
   reducers: {
-    addTransaction: (state, action: PayloadAction<TransactionState>) => {
-      state.push(action.payload);
+    addTransaction: (state, action: PayloadAction<TransactionModel>) => {
+      state.items.push(action.payload);
     },
     deleteTransaction: (state, action: PayloadAction<string>) => {
-      return state.filter((transaction) => transaction.id !== action.payload);
+      state.items.filter((transaction) => transaction.id !== action.payload);
     },
   },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchTransactions.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(fetchTransactions.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.items = state.items.concat(action.payload);
+      })
+      .addCase(fetchTransactions.rejected, (state) => {
+        state.status = 'failed';
+      })
+      .addCase(addTransactionAsync.fulfilled, (state, action) => {
+        state.items.push(action.payload);
+      });
+  },
 });
+
+export const fetchTransactions = createAsyncThunk('transactions/fetchTransactions', async () => {
+  const data = await getDocs(transactionsRef);
+  return data.docs.map((item) => item.data());
+});
+
+export const addTransactionAsync = createAsyncThunk(
+  'transactions/addTransactionAsync',
+  async (transaction: TransactionModel) => {
+    await addDoc(transactionsRef, { ...transaction });
+    return transaction;
+  }
+);
+
+// TODO: delete a document
+export const deleteTransactionAsync = createAsyncThunk(
+  'transactions/deleteTransactionAsync',
+  async (id: string) => {
+    // await deleteDoc(...);
+  }
+);
 
 const { actions, reducer } = transactionsSlice;
 export const { addTransaction, deleteTransaction } = actions;

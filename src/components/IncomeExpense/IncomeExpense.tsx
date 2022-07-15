@@ -3,7 +3,7 @@ import { useAppSelector } from '../../app/hooks';
 import { getProperTransactionAmountDisplay } from '../../lib/utils';
 
 export const IncomeExpense = () => {
-  const transactions = useAppSelector((state) => state.transactions);
+  const transactions = useAppSelector((state) => state.transactions.items);
 
   const income = transactions.reduce((prev, cur) => prev + (cur.amount > 0 ? cur.amount : 0), 0);
   const expenses = transactions.reduce((prev, cur) => prev + (cur.amount < 0 ? cur.amount : 0), 0);

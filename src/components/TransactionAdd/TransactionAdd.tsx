@@ -1,25 +1,28 @@
 import React, { useState } from 'react';
 import { v4 as uuid } from 'uuid';
 import { useAppDispatch } from '../../app/hooks';
-import { addTransaction, TransactionState } from '../../reducers/transactions';
+import { addTransactionAsync, TransactionModel } from '../../reducers/transactions';
 
 export const TransactionAdd = () => {
   const [text, setText] = useState('');
   const [amount, setAmount] = useState(0);
   const dispatch = useAppDispatch();
 
+  // FIXME: minus from keyboard is not working
   const addTransactionHandler = (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (!amount) {
       return;
     }
-
-    const newTransaction: TransactionState = {
+    const newTransaction: TransactionModel = {
       text,
       amount,
       id: uuid(),
     };
-    dispatch(addTransaction(newTransaction));
+    dispatch(addTransactionAsync(newTransaction));
+
+    setText('');
+    setAmount(0);
   };
 
   return (

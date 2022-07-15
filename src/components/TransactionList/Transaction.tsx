@@ -1,13 +1,13 @@
 import React, { FC } from 'react';
 import { useAppDispatch } from '../../app/hooks';
 import { getProperTransactionAmountDisplay } from '../../lib/utils';
-import { deleteTransaction, TransactionState } from '../../reducers/transactions';
+import { deleteTransaction, TransactionModel } from '../../reducers/transactions';
 
-type TransactionProps = {
-  transaction: TransactionState;
+type ComponentProps = {
+  transaction: TransactionModel;
 };
 
-export const Transaction: FC<TransactionProps> = ({ transaction }) => {
+export const Transaction: FC<ComponentProps> = ({ transaction }) => {
   const dispatch = useAppDispatch();
 
   const className = transaction.amount < 0 ? 'minus' : 'plus';
