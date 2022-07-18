@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { addDoc, deleteDoc, doc, getDocs } from 'firebase/firestore';
-import { transactionsRef } from '../app/firebase';
+import { addDoc, deleteDoc, getDocs } from 'firebase/firestore';
+import { getDocumentRefById, transactionsRef } from '../app/firebase';
 
 export interface TransactionModel {
   id: string;
@@ -43,6 +43,9 @@ export const transactionsSlice = createSlice({
       })
       .addCase(addTransactionAsync.fulfilled, (state, action) => {
         state.items.push(action.payload);
+      })
+      .addCase(deleteTransactionAsync.fulfilled, (state, action) => {
+        state.items = state.items.filter((item) => item.id !== action.payload);
       });
   },
 });
@@ -60,11 +63,11 @@ export const addTransactionAsync = createAsyncThunk(
   }
 );
 
-// TODO: delete a document
 export const deleteTransactionAsync = createAsyncThunk(
   'transactions/deleteTransactionAsync',
   async (id: string) => {
-    // await deleteDoc(...);
+    await deleteDoc(getDocumentRefById(id));
+    return id;
   }
 );
 

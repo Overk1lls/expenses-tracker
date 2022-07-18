@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { useAppDispatch } from '../../app/hooks';
 import { getProperTransactionAmountDisplay } from '../../lib/utils';
-import { deleteTransaction, TransactionModel } from '../../reducers/transactions';
+import { deleteTransactionAsync, TransactionModel } from '../../reducers/transactions';
 
 type ComponentProps = {
   transaction: TransactionModel;
@@ -15,7 +15,10 @@ export const Transaction: FC<ComponentProps> = ({ transaction }) => {
   return (
     <li className={className}>
       {transaction.text} <span>{getProperTransactionAmountDisplay(transaction.amount)}</span>
-      <button className="delete-btn" onClick={() => dispatch(deleteTransaction(transaction.id))}>
+      <button
+        className="delete-btn"
+        onClick={() => dispatch(deleteTransactionAsync(transaction.id))}
+      >
         x
       </button>
     </li>

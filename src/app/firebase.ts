@@ -1,10 +1,11 @@
 import { FirebaseApp, initializeApp } from 'firebase/app';
-import { collection, FirestoreDataConverter, getFirestore } from 'firebase/firestore';
+import { collection, doc, FirestoreDataConverter, getFirestore } from 'firebase/firestore';
 import { TransactionModel } from '../reducers/transactions';
 import { getConfig } from './config';
 import { Nullable } from './types';
 
 let app: Nullable<FirebaseApp> = null;
+export const transactionsCollectionName = 'transactions';
 
 export const getFirebaseApp = (): FirebaseApp => {
   if (!app) {
@@ -29,6 +30,8 @@ export const transactionsConverter: FirestoreDataConverter<TransactionModel> = {
   },
 };
 
-export const transactionsRef = collection(firestore, 'transactions').withConverter(
+export const transactionsRef = collection(firestore, transactionsCollectionName).withConverter(
   transactionsConverter
 );
+
+export const getDocumentRefById = (id: string) => doc(firestore, transactionsCollectionName, id);

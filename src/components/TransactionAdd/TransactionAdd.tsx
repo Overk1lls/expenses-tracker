@@ -8,10 +8,9 @@ export const TransactionAdd = () => {
   const [amount, setAmount] = useState(0);
   const dispatch = useAppDispatch();
 
-  // FIXME: minus from keyboard is not working
   const addTransactionHandler = (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    if (!amount) {
+    if (isNaN(amount)) {
       return;
     }
     const newTransaction: TransactionModel = {
@@ -35,7 +34,6 @@ export const TransactionAdd = () => {
             type="text"
             id="text"
             placeholder="Comments"
-            value={text}
             onChange={(e) => setText(e.target.value)}
           />
         </div>
@@ -48,7 +46,6 @@ export const TransactionAdd = () => {
             type="number"
             id="amount"
             placeholder="Amount"
-            value={amount}
             onChange={(e) => setAmount(parseInt(e.target.value))}
           />
         </div>
