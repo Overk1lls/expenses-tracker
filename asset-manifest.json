@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/Overk1lls/expenses-tracker/static/css/main.4b998ee4.css",
+    "main.js": "/Overk1lls/expenses-tracker/static/js/main.4985b64d.js",
+    "index.html": "/Overk1lls/expenses-tracker/index.html",
+    "main.4b998ee4.css.map": "/Overk1lls/expenses-tracker/static/css/main.4b998ee4.css.map",
+    "main.4985b64d.js.map": "/Overk1lls/expenses-tracker/static/js/main.4985b64d.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.4b998ee4.css",
+    "static/js/main.4985b64d.js"
+  ]
+}
